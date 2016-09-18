@@ -15,7 +15,7 @@ import java.awt.event.KeyEvent;
  */
 public class SnakeGame extends JPanel implements ActionListener
 {
-    public static final int SCALE = 32; //размер одной клетки
+    public static final int SCALE = 32; //размер одной клетки.
     public static final int WIDHT = 20; //ширина(в клетках)
     public static final int HIGHT = 20; //высота(в клетках)
     public static final int SPEED = 5; //скорость движения змейки
