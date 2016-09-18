@@ -11,7 +11,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 /**
- * Created by Павел on 13.07.2015.
+ * Created by Павел on 13.07.2016.
  */
 public class SnakeGame extends JPanel implements ActionListener
 {
