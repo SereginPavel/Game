@@ -1,7 +1,7 @@
-package com.javarush.test.SnakeGame;
+package com.github.sereginpavel;
 
-import com.javarush.test.SnakeGame.objects.Apple;
-import com.javarush.test.SnakeGame.objects.Snake;
+import com.github.sereginpavel.objects.Apple;
+import com.github.sereginpavel.objects.Snake;
 
 import javax.swing.*;
 import java.awt.*;

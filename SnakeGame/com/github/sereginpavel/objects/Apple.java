@@ -1,6 +1,7 @@
-package com.javarush.test.SnakeGame.objects;
+package com.github.sereginpavel.objects;
 
-import com.javarush.test.SnakeGame.SnakeGame;
+
+import com.github.sereginpavel.SnakeGame;
 
 /**
  * Created by Павел on 13.07.2015.
