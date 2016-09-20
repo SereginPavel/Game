@@ -88,7 +88,7 @@ public class MiniMusicPlayer3 {
 
                 g.setColor(new Color(red, green, blue));
 
-                int ht = (int) ((Math.random() * 125) + 10);
+                int ht = (int) ((Math.random() * 120) + 10);
                 int width = (int) ((Math.random() * 125) + 10);
                 int x = (int) ((Math.random() * 40) + 10);
                 int y = (int) ((Math.random() * 40) + 1);
