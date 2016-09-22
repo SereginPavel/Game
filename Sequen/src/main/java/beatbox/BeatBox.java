@@ -1,9 +1,10 @@
-/**
+package beatbox; /**
  * Created by SerP on 20.09.2016.
  */
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.*;
 import java.util.*;
 
 import javax.sound.midi.*;
@@ -52,6 +53,14 @@ public class BeatBox {
         downTempo.addActionListener(new MyDownTempoListener());
         buttonBox.add(downTempo);
 
+        JButton serializet = new JButton("serializt");
+        serializet.addActionListener(new MySendListener());
+        buttonBox.add(serializet);
+
+        JButton restore = new JButton("restore");
+        restore.addActionListener(new MyReaderListener());
+        buttonBox.add(restore);
+
         Box nameBox = new Box(BoxLayout.Y_AXIS);
         for(int i = 0; i < 16; i++){
             nameBox.add(new Label(instrumentNames[i]));
@@ -97,7 +106,7 @@ public class BeatBox {
 
     public class MyStartListener implements ActionListener{
 
-        @Override
+
         public void actionPerformed(ActionEvent e) {
             buildTrackAndStart();
         }
@@ -105,7 +114,7 @@ public class BeatBox {
 
     public class MyStopListener implements ActionListener{
 
-        @Override
+
         public void actionPerformed(ActionEvent e) {
             sequencer.stop();
         }
@@ -113,7 +122,7 @@ public class BeatBox {
 
     public class MyUpTempoListener implements ActionListener{
 
-        @Override
+
         public void actionPerformed(ActionEvent e) {
             float tempoFactor = sequencer.getTempoFactor();
             sequencer.setTempoFactor((float) (tempoFactor * 1.03));
@@ -122,7 +131,7 @@ public class BeatBox {
 
     public class MyDownTempoListener implements ActionListener{
 
-        @Override
+
         public void actionPerformed(ActionEvent e) {
             float tempoFactor = sequencer.getTempoFactor();
             sequencer.setTempoFactor((float) (tempoFactor * 0.97));
@@ -183,5 +192,52 @@ public class BeatBox {
             e.printStackTrace();
         }
         return event;
+    }
+
+    public class MySendListener implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            boolean[] checkBoxState = new boolean[256];
+            JFileChooser fileSave = new JFileChooser();
+            fileSave.showOpenDialog(theFrame);
+            for (int i = 0; i < 256; i++) {
+                JCheckBox check = (JCheckBox) checkBoxList.get(i);
+                if (check.isSelected()){
+                    checkBoxState[i] = true;
+                }
+            }
+            try(FileOutputStream fileStream = new FileOutputStream(fileSave.getSelectedFile())) {
+                ObjectOutputStream os = new ObjectOutputStream(fileStream);
+                os.writeObject(checkBoxState);
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
+
+    public class MyReaderListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            boolean[] checkBoxState = new boolean[256];
+            JFileChooser fileOpen = new JFileChooser();
+            fileOpen.showOpenDialog(theFrame);
+            try (FileInputStream fileStream = new FileInputStream(fileOpen.getSelectedFile())) {
+                ObjectInputStream is = new ObjectInputStream(fileStream);
+                checkBoxState = (boolean[]) is.readObject();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+            for (int i = 0; i < 256; i++) {
+                JCheckBox check = (JCheckBox) checkBoxList.get(i);
+                if (checkBoxState[i]) {
+                    check.setSelected(true);
+                } else {
+                    check.setSelected(false);
+                }
+            }
+
+        }
     }
 }
