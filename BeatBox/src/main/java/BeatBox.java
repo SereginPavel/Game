@@ -44,7 +44,7 @@ public class BeatBox {
         userName = name;
         //соединение с сервером
         try {
-            Socket sock = new Socket("127.0.0.1", 5001);
+            Socket sock = new Socket("94.79.33.20", 11221);
             out = new ObjectOutputStream(sock.getOutputStream());
             in = new ObjectInputStream(sock.getInputStream());
             Thread remote = new Thread(new RemoteReader());
