@@ -25,6 +25,8 @@ public class BeatBox {
     ObjectOutputStream out;
     ObjectInputStream in;
     HashMap<String, boolean[]> otherSeqsMap = new HashMap<>();
+    static String socketSrever;
+    static int port;
 
     Sequencer sequencer;
     Sequence sequence;
@@ -36,21 +38,62 @@ public class BeatBox {
     int[] instruments = {35, 42, 46, 38, 49, 39, 50, 60, 70, 72, 64, 56, 58, 47, 67, 63};
 
     public static void main(String[] args) {
-        new BeatBox().startUp(args[0]);
+        String name = checkName(args);
+        checkSocket(args);
+        new BeatBox().startUp(name);
+    }
 
+    private static void checkSocket(String[] socket){
+        if (socket.length < 2){
+            System.out.println("Введите хост и порт сервера через пробел");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+            String line = null;
+            try {
+                while((line = reader.readLine()).equals("")){
+                    System.out.println("введите хост и порт сервера через пробел");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            String[] s = line.split(" ");
+            socketSrever = s[0];
+            port = Integer.parseInt(s[1]);
+        }else{
+            socketSrever = socket[1];
+            port = Integer.parseInt(socket[2]);
+        }
+    }
+
+    private static String checkName(String[] name ){
+        if (name.length == 0){
+            System.out.println("вы не указали имя пользовотеля. Введите имя:");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+            String line = null;
+            try {
+                while((line = reader.readLine()).equals("")){
+                    System.out.println("вы не указали имя пользовотеля. Введите имя:");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return line;
+        }else{
+            return name[0];
+        }
     }
 
     private void startUp(String name) {
         userName = name;
         //соединение с сервером
         try {
-            Socket sock = new Socket("94.79.33.20", 11221);
+            Socket sock = new Socket(socketSrever, port);
+            System.out.println("Соединение с сервером установлено!");
             out = new ObjectOutputStream(sock.getOutputStream());
             in = new ObjectInputStream(sock.getInputStream());
             Thread remote = new Thread(new RemoteReader());
             remote.start();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("По задонному хосту и порту не удалось подключиться к серверу!!!");
         }
         setUpMidi();
         buildGUI();
@@ -66,29 +109,45 @@ public class BeatBox {
 
         checkBoxList = new ArrayList<JCheckBox>();
         Box buttonBox = new Box(BoxLayout.Y_AXIS);
+        buttonBox.setSize(100,200);
 
-        JButton start = new JButton("Start");
+        JButton start = new JButton("         Start          ");
         start.addActionListener(new MyStartListener());
         buttonBox.add(start);
 
-        JButton stop = new JButton("Stop");
+        JButton stop = new JButton("          Stop          ");
         stop.addActionListener(new MyStopListener());
         buttonBox.add(stop);
 
-        JButton upTempo = new JButton("Tempo Up");
+        JButton clean = new JButton("         Clean          ");
+        clean.addActionListener(new MyCleanListener());
+        buttonBox.add(clean);
+
+        JButton upTempo = new JButton("     Tempo Up     ");
         upTempo.addActionListener(new MyUpTempoListener());
         buttonBox.add(upTempo);
 
-        JButton downTempo = new JButton("Tempo Down");
+        JButton downTempo = new JButton("  Tempo Down   ");
         downTempo.addActionListener(new MyDownTempoListener());
         buttonBox.add(downTempo);
 
-        JButton sendIt = new JButton("sendIt");
+        JButton generateMusic = new JButton("      Generate      ");
+        generateMusic.addActionListener(new MyGenerateMusicListener());
+        buttonBox.add(generateMusic);
+
+        JButton sendIt = new JButton("         sendIt         ");
         sendIt.addActionListener(new MySendListener());
         buttonBox.add(sendIt);
 
+        JLabel labelIn = new JLabel("Введите сообщение:");
+        buttonBox.add(labelIn);
+
         userMessage = new JTextField();
         buttonBox.add(userMessage);
+
+
+        JLabel labelOut = new JLabel("Переписка");
+        buttonBox.add(labelOut);
 
         incomingList = new JList();
         incomingList.addListSelectionListener(new MyListSelectionListener());
@@ -203,6 +262,29 @@ public class BeatBox {
         }
     }
 
+    private class MyGenerateMusicListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            for (int i = 0; i < 256; i++) {
+                checkBoxList.get(i).setSelected(false);
+            }
+
+            for (int i = 0; i < 50; i++) {
+                int check = (int) (Math.random() * 256);
+                checkBoxList.get(check).setSelected(true);
+            }
+        }
+    }
+
+
+    private class MyCleanListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            for (int i = 0; i < 256; i++) {
+                checkBoxList.get(i).setSelected(false);
+            }
+        }
+    }
 
     private void changeSequence(boolean[] checkboxState) {
         for (int i = 0; i < 256; i++) {
