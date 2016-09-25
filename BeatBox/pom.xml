@@ -17,7 +17,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>BeatBox</mainClass>
+                            <mainClass>com.sbt.homework.BeatBox</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
