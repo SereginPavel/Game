@@ -1,4 +1,5 @@
-package com.sbt.homework; /**
+package com.sbt.homework;
+/**
  * Created by SerP on 20.09.2016.
  */
 import java.awt.*;
