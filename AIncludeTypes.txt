@@ -1,0 +1,3 @@
+<IncludeTypes>
+	<Type>PIR23_KSB_new</Type>
+</IncludeTypes>
