@@ -8,9 +8,9 @@
     <artifactId>XMLConcat</artifactId>
     <packaging>jar</packaging>
     <version>1.0</version>
-    <configuration>
-        <encoding>UTF-8</encoding>
-    </configuration>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>>
     <build>
         <plugins>
             <plugin>
