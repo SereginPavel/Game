@@ -24,7 +24,7 @@ public class XMLConcat {
         XMLEventWriter xmlEventWriter = xmlOutFactory.createXMLEventWriter(outputWriter);
         XMLEventFactory xmlEventFactory = XMLEventFactory.newFactory();
 
-        //создаем структуру файла валидации
+        //??????? ????????? ????? ?????????
         xmlEventWriter.add(xmlEventFactory.createStartDocument());
         xmlEventWriter.add(xmlEventFactory.createStartElement("", null, "ControlMessage"));
         xmlEventWriter.add(xmlEventFactory.createStartElement("", null, "ValidateMessage"));
@@ -35,7 +35,7 @@ public class XMLConcat {
         xmlEventWriter.add(xmlEventFactory.createStartElement("", null, "Flows"));
 
         File[] flowFiles = dir.listFiles();
-        System.out.println("-------Сборка КЭШа валидации КСШ УБ-------");
+        System.out.println("-------Build Cache validation for ESB UB-------");
         System.out.println();
         checkFile(flowFiles, xmlInFactory, xmlEventWriter, xmlEventFactory);
 
@@ -44,7 +44,7 @@ public class XMLConcat {
         xmlEventWriter.add(xmlEventFactory.createEndElement("", null, "ExecutionGroups"));
         xmlEventWriter.add(xmlEventFactory.createEndElement("", null, "DefinitionElement"));
 
-        //добавление типов
+        //?????????? ?????
         xmlEventWriter.add(xmlEventFactory.createStartElement("", null, "DefinitionType"));
         xmlEventWriter.add(xmlEventFactory.createStartElement("", null, "ExecutionGroups"));
         xmlEventWriter.add(xmlEventFactory.createStartElement("", null, "ExecutionGroup"));
@@ -58,7 +58,7 @@ public class XMLConcat {
         xmlEventWriter.add(xmlEventFactory.createEndElement("", null, "ExecutionGroups"));
         //----------------------------------------------------
 
-        //добавление списка типов
+        //?????????? ?????? ?????
         xmlEventWriter.add(xmlEventFactory.createStartElement("", null, flowFiles[flowFiles.length - 1].getName()));
         addTypeList(flowFiles[flowFiles.length - 1].listFiles(),xmlInFactory, xmlEventWriter, xmlEventFactory);
         xmlEventWriter.add(xmlEventFactory.createEndElement("", null, flowFiles[flowFiles.length - 1].getName()));
@@ -70,6 +70,8 @@ public class XMLConcat {
 
         xmlEventWriter.close();
         outputWriter.close();
+        System.out.println();
+        System.out.println("SUCCESSFULLY!!!");
     }
 
     public static void checkFile(File[] file, XMLInputFactory xmlInFactory, XMLEventWriter xmlEventWriter, XMLEventFactory xmlEventFactory) throws XMLStreamException {
@@ -77,10 +79,10 @@ public class XMLConcat {
             if (!file[i].isFile()){
                 xmlEventWriter.add(xmlEventFactory.createStartElement("", null, "Flow"));
                 xmlEventWriter.add(xmlEventFactory.createAttribute("name", file[i].getName()));
-                //добавляем название потока в список
+                //????????? ???????? ?????? ? ??????
                 nameFlow.add(file[i].getName());
                 HashSet<String> hashSet = new HashSet<String>();
-                System.out.println("Поток " + file[i].getName() + ":");
+                System.out.println("Flow " + file[i].getName() + ":");
                 createService(file[i].listFiles(), xmlInFactory, xmlEventWriter, xmlEventFactory, hashSet);
                 listType.add(hashSet);
                 xmlEventWriter.add(xmlEventFactory.createEndElement("", null, "Flow"));
@@ -102,7 +104,7 @@ public class XMLConcat {
                     addXSD(rootFileVer.listFiles(),  xmlInFactory, xmlEventWriter, xmlEventFactory, hashSet);
 
                     xmlEventWriter.add(xmlEventFactory.createEndElement("", null, "Service"));
-                    System.out.println("     Добавлена схема: " + rootFile.getName()+ "_v" + rootFileVer.getName());
+                    System.out.println("     Added schema: " + rootFile.getName()+ "_v" + rootFileVer.getName());
                 }
             }
         }
