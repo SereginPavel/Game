@@ -1,10 +1,7 @@
 /**
  * Created by SerP on 07.11.2016.
  */
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.Writer;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -19,7 +16,7 @@ public class XMLConcat {
         XMLInputFactory xmlInFactory = XMLInputFactory.newFactory();
         File dir = new File("ub_adapters");
         //File[] rootFiles = dir.listFiles();
-        Writer outputWriter = new FileWriter("CacheValidate.xml");
+        Writer outputWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("CacheValidate.xml"), "UTF-8"));
         XMLOutputFactory xmlOutFactory = XMLOutputFactory.newFactory();
         XMLEventWriter xmlEventWriter = xmlOutFactory.createXMLEventWriter(outputWriter);
         XMLEventFactory xmlEventFactory = XMLEventFactory.newFactory();
